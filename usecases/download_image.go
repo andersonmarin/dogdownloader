@@ -14,6 +14,11 @@ var downloadDirectory string
 func init() {
 	flag.StringVar(&downloadDirectory, "d", "downloads", "download directory")
 	flag.Parse()
+
+	err := os.MkdirAll(downloadDirectory, os.ModePerm)
+	if err != nil && !os.IsExist(err) {
+		panic(err)
+	}
 }
 
 func DownloadImage(src string) error {
