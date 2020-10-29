@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-func ListImagesListener(wg *sync.WaitGroup, breeds, imagesChan chan string) {
+func ListImagesListener(wg *sync.WaitGroup, breeds, c chan string) {
 	defer wg.Done()
 	for breed := range breeds {
 		fmt.Printf("fetching images list for %s...", breed)
@@ -18,11 +18,11 @@ func ListImagesListener(wg *sync.WaitGroup, breeds, imagesChan chan string) {
 		fmt.Println("done")
 
 		for i, image := range images {
-			imagesChan <- image
+			c <- image
 			fmt.Printf("\rdownloading images for %s... %.2f%%", breed, (float64(i+1)/float64(len(images)))*100)
 		}
 
 		fmt.Println()
 	}
-	close(imagesChan)
+	close(c)
 }
